@@ -67,13 +67,13 @@ function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const displayedNotes = showAll || searchQuery ? notes : notes.slice(0, 6);
+
   return (
     <main className="min-h-screen">
       <Hero onSearch={setSearchQuery} onFilterMedium={setMediumFilter} totalDownloads={totalDownloads} />
-      <div className="container py-16">
-  return (
-    <main className="min-h-screen">
-      <Hero onSearch={setSearchQuery} totalDownloads={totalDownloads} />
       <div className="container py-16">
         <div className="flex items-center justify-between mb-10">
           <div>

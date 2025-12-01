@@ -50,15 +50,19 @@ export default function NoteCard({ id, title, subject, grade, author, size, down
         }
     };
 
+    const handlePreview = () => {
+        // Open file in new tab for preview
+        window.open(fileUrl, '_blank');
+    };
+
     // Choose icon based on type
     const getIcon = () => {
         switch(type?.toLowerCase()) {
-                    <div className="card-tags">
-                        <span className="tag tag-grade">{grade}</span>
-                        <span className="tag tag-subject">{subject}</span>
-                        {type && <span className="tag tag-type">{type}</span>}
-                        {medium && <span className="tag" style={{ backgroundColor: '#e0f2fe', color: '#0284c7' }}>{medium}</span>}
-                    </div>
+            case 'past paper':
+                return <File size={24} strokeWidth={1.5} />;
+            case 'note':
+                return <BookOpen size={24} strokeWidth={1.5} />;
+            default:
                 return <FileText size={24} strokeWidth={1.5} />;
         }
     };
@@ -74,6 +78,7 @@ export default function NoteCard({ id, title, subject, grade, author, size, down
                         <span className="tag tag-grade">{grade}</span>
                         <span className="tag tag-subject">{subject}</span>
                         {type && <span className="tag tag-type">{type}</span>}
+                        {medium && <span className="tag" style={{ backgroundColor: '#e0f2fe', color: '#0284c7' }}>{medium}</span>}
                     </div>
                     <h3 className="card-title">{title}</h3>
                     <p className="card-author">By {author}</p>
@@ -97,7 +102,6 @@ export default function NoteCard({ id, title, subject, grade, author, size, down
                     </button>
                     <button className="btn-icon" title="Preview" onClick={handlePreview}>
                         <Eye size={18} />
-                    </button>size={18} />
                     </button>
                     <button className="btn-primary btn-sm" title="Download" onClick={handleDownload}>
                         <Download size={16} />
