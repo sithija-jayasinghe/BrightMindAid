@@ -4,6 +4,11 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import NoteCard from './components/NoteCard';
 import RequestBoard from './pages/RequestBoard';
+import VideoTutorials from './pages/VideoTutorials';
+import StudyPlanner from './pages/StudyPlanner';
+import RevisionCards from './pages/RevisionCards';
+import ImpactDashboard from './pages/ImpactDashboard';
+import ThankYouNotes from './pages/ThankYouNotes';
 import UploadModal from './components/UploadModal';
 import { supabase } from './lib/supabase';
 
@@ -326,6 +331,11 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/requests" element={<RequestBoard onUploadClick={() => setUploadModalOpen(true)} />} />
+          <Route path="/videos" element={<VideoTutorials />} />
+          <Route path="/planner" element={<StudyPlanner />} />
+          <Route path="/revision" element={<RevisionCards />} />
+          <Route path="/impact" element={<ImpactDashboard />} />
+          <Route path="/thanks" element={<ThankYouNotes />} />
         </Routes>
 
         <UploadModal

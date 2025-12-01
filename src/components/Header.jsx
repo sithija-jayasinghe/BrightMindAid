@@ -1,14 +1,26 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { GraduationCap, Zap, ZapOff, Upload, Menu, X } from 'lucide-react';
+import { GraduationCap, Zap, ZapOff, Upload, Menu, X, ChevronDown, BookOpen, Video, Calendar, Layers, BarChart3, Heart } from 'lucide-react';
 
 export default function Header({ liteMode, toggleLiteMode, onUploadClick }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isToolsOpen, setIsToolsOpen] = useState(false);
     const location = useLocation();
 
     const isActive = (path) => location.pathname === path;
 
-    const closeMenu = () => setIsMenuOpen(false);
+    const closeMenu = () => {
+        setIsMenuOpen(false);
+        setIsToolsOpen(false);
+    };
+
+    const toolsLinks = [
+        { path: '/videos', label: 'Video Tutorials', icon: Video },
+        { path: '/planner', label: 'Study Planner', icon: Calendar },
+        { path: '/revision', label: 'Revision Cards', icon: Layers },
+        { path: '/impact', label: 'Impact Dashboard', icon: BarChart3 },
+        { path: '/thanks', label: 'Thank You Wall', icon: Heart },
+    ];
 
     return (
         <header className="header">
@@ -39,6 +51,31 @@ export default function Header({ liteMode, toggleLiteMode, onUploadClick }) {
                         >
                             Request Notes
                         </Link>
+
+                        {/* Tools Dropdown */}
+                        <div className="nav-dropdown">
+                            <button 
+                                className={`nav-link dropdown-trigger ${toolsLinks.some(t => isActive(t.path)) ? 'active' : ''}`}
+                                onClick={() => setIsToolsOpen(!isToolsOpen)}
+                            >
+                                Study Tools <ChevronDown size={14} className={isToolsOpen ? 'rotate' : ''} />
+                            </button>
+                            {isToolsOpen && (
+                                <div className="dropdown-menu">
+                                    {toolsLinks.map(tool => (
+                                        <Link
+                                            key={tool.path}
+                                            to={tool.path}
+                                            className={`dropdown-item ${isActive(tool.path) ? 'active' : ''}`}
+                                            onClick={() => setIsToolsOpen(false)}
+                                        >
+                                            <tool.icon size={16} />
+                                            {tool.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="nav-actions">
@@ -85,6 +122,21 @@ export default function Header({ liteMode, toggleLiteMode, onUploadClick }) {
                         >
                             Request Notes
                         </Link>
+
+                        <div className="mobile-nav-section">
+                            <span className="mobile-nav-section-title">Study Tools</span>
+                            {toolsLinks.map(tool => (
+                                <Link
+                                    key={tool.path}
+                                    to={tool.path}
+                                    className={`mobile-nav-link ${isActive(tool.path) ? 'active' : ''}`}
+                                    onClick={closeMenu}
+                                >
+                                    <tool.icon size={16} />
+                                    {tool.label}
+                                </Link>
+                            ))}
+                        </div>
                         
                         <div className="mobile-nav-actions">
                             <button
