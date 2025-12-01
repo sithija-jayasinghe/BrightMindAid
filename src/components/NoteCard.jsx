@@ -91,10 +91,6 @@ export default function NoteCard({ id, title, subject, grade, author, size, down
                         <span className="file-size-label">Size: </span>
                         <span className="file-size-value">{size}</span>
                     </div>
-                    <div className="file-downloads">
-                        <span className="file-size-label">Downloads: </span>
-                        <span className="file-size-value">{downloadCount}</span>
-                    </div>
                 </div>
                 <div className="card-actions">
                     <button className="btn-icon" title={copied ? "Copied!" : "Share"} onClick={handleShare}>
