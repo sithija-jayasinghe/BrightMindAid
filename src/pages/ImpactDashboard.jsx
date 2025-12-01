@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart3, Download, Users, BookOpen, TrendingUp, MapPin, Calendar, Award, Heart, Target, AlertCircle, Clock, Activity } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import './ImpactDashboard.css';
 
 export default function ImpactDashboard() {
     const [stats, setStats] = useState({

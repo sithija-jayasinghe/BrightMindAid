@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Play, ExternalLink, Search, Filter, BookOpen, Youtube, Clock, ThumbsUp, Video } from 'lucide-react';
+import './VideoTutorials.css';
 
 // Curated educational video resources for Sri Lankan students
 const videoResources = {

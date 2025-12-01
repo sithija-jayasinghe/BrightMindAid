@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, BookOpen, Target, Plus, Trash2, CheckCircle, AlertCircle, Download, Bell, Settings, BarChart3, ListChecks, Lightbulb } from 'lucide-react';
+import './StudyPlanner.css';
 
 // Helper to load saved data from localStorage
 const loadSavedData = () => {
