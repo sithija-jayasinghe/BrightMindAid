@@ -134,17 +134,15 @@ export default function RevisionCards() {
     return (
         <div className="container py-8">
             {/* Header */}
-            <div className="revision-header">
-                <div className="header-content">
-                    <div className="header-title-row">
-                        <Layers size={28} className="header-icon" />
-                        <h1 className="text-3xl">Quick Revision Cards</h1>
-                    </div>
-                    <p className="text-gray-500">
-                        Bite-sized revision cards with key formulas and concepts.
-                        Save, share, and study on the go!
-                    </p>
+            <div className="page-header">
+                <div className="header-title-row">
+                    <Layers size={28} className="header-icon" />
+                    <h1 className="text-3xl">Quick Revision Cards</h1>
                 </div>
+                <p className="page-description">
+                    Bite-sized revision cards with key formulas and concepts.
+                    Save, share, and study on the go!
+                </p>
             </div>
 
             {/* Filters */}

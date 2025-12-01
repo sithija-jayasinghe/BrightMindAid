@@ -149,24 +149,24 @@ export default function ThankYouNotes() {
     return (
         <div className="container py-8">
             {/* Header */}
-            <div className="thank-you-header">
-                <div className="header-content">
+            <div className="page-header">
+                <div className="page-header-top">
                     <div className="header-title-row">
                         <Heart size={28} className="header-icon" />
                         <h1 className="text-3xl">Thank You Wall</h1>
                     </div>
-                    <p className="text-gray-500">
-                        A space for students to express gratitude to the amazing people who share their study materials.
-                        Your contributions are changing lives!
-                    </p>
+                    <button 
+                        className="btn-primary"
+                        onClick={() => setShowForm(!showForm)}
+                    >
+                        {showForm ? <ChevronUp size={18} /> : <Heart size={18} />}
+                        {showForm ? 'Close' : 'Send Thanks'}
+                    </button>
                 </div>
-                <button 
-                    className="btn-primary"
-                    onClick={() => setShowForm(!showForm)}
-                >
-                    {showForm ? <ChevronUp size={18} /> : <Heart size={18} />}
-                    {showForm ? 'Close' : 'Send Thanks'}
-                </button>
+                <p className="page-description">
+                    A space for students to express gratitude to the amazing people who share their study materials.
+                    Your contributions are changing lives!
+                </p>
             </div>
 
             {/* Form */}

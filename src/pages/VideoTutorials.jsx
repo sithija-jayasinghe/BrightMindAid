@@ -114,14 +114,15 @@ export default function VideoTutorials() {
     return (
         <div className="container py-8">
             {/* Header */}
-            <div className="video-header">
-                <div>
-                    <h1 className="text-3xl mb-2">Video Tutorials</h1>
-                    <p className="text-gray-500">
-                        Free educational videos curated for O/L and A/L students. 
-                        Learn from the best Sri Lankan educators!
-                    </p>
+            <div className="page-header">
+                <div className="header-title-row">
+                    <Video size={28} className="header-icon" />
+                    <h1 className="text-3xl">Video Tutorials</h1>
                 </div>
+                <p className="page-description">
+                    Free educational videos curated for O/L and A/L students. 
+                    Learn from the best Sri Lankan educators!
+                </p>
             </div>
 
             {/* Official Channels */}

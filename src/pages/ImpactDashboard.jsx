@@ -163,17 +163,15 @@ export default function ImpactDashboard() {
     return (
         <div className="container py-8">
             {/* Header */}
-            <div className="impact-header">
-                <div className="header-content">
-                    <div className="header-title-row">
-                        <Activity size={28} className="header-icon" />
-                        <h1 className="text-3xl">Impact Dashboard</h1>
-                    </div>
-                    <p className="text-gray-500">
-                        See how BrightMindAid is helping Sri Lankan students affected by natural disasters.
-                        Every contribution makes a difference!
-                    </p>
+            <div className="page-header">
+                <div className="header-title-row">
+                    <Activity size={28} className="header-icon" />
+                    <h1 className="text-3xl">Impact Dashboard</h1>
                 </div>
+                <p className="page-description">
+                    See how BrightMindAid is helping Sri Lankan students affected by natural disasters.
+                    Every contribution makes a difference!
+                </p>
             </div>
 
             {/* Main Stats */}

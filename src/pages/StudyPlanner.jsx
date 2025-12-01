@@ -148,17 +148,15 @@ export default function StudyPlanner() {
     return (
         <div className="container py-8">
             {/* Header */}
-            <div className="planner-header">
-                <div className="header-content">
-                    <div className="header-title-row">
-                        <Calendar size={28} className="header-icon" />
-                        <h1 className="text-3xl">Study Planner</h1>
-                    </div>
-                    <p className="text-gray-500">
-                        Create a personalized study schedule based on your exam date.
-                        Track your progress and stay on track!
-                    </p>
+            <div className="page-header">
+                <div className="header-title-row">
+                    <Calendar size={28} className="header-icon" />
+                    <h1 className="text-3xl">Study Planner</h1>
                 </div>
+                <p className="page-description">
+                    Create a personalized study schedule based on your exam date.
+                    Track your progress and stay on track!
+                </p>
             </div>
 
             <div className="planner-grid">
