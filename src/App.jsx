@@ -12,6 +12,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [totalDownloads, setTotalDownloads] = useState(0);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     fetchDownloads();
@@ -63,6 +64,8 @@ function Home() {
     }
   };
 
+  const displayedNotes = showAll || searchQuery ? notes : notes.slice(0, 6);
+
   return (
     <main className="min-h-screen">
       <Hero onSearch={setSearchQuery} totalDownloads={totalDownloads} />
@@ -76,10 +79,10 @@ function Home() {
               {searchQuery ? `Found ${notes.length} materials` : 'Latest study materials from our community'}
             </p>
           </div>
-          {!searchQuery && (
-            <a href="#" className="text-primary">
+          {!searchQuery && !showAll && notes.length > 6 && (
+            <button onClick={() => setShowAll(true)} className="text-primary font-semibold hover:underline">
               View All →
-            </a>
+            </button>
           )}
         </div>
 
@@ -98,7 +101,7 @@ function Home() {
           </div>
         ) : (
           <div className="notes-grid">
-            {notes.map(note => (
+            {displayedNotes.map(note => (
               <NoteCard
                 key={note.id}
                 id={note.id}
@@ -110,6 +113,7 @@ function Home() {
                 type={note.type}
                 downloads={note.downloads}
                 fileUrl={note.file_url}
+                onDownload={fetchDownloads}
               />
             ))}
           </div>

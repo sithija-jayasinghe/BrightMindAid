@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileText, Download, Eye, File, BookOpen } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-export default function NoteCard({ id, title, subject, grade, author, size, downloads, type, fileUrl }) {
+export default function NoteCard({ id, title, subject, grade, author, size, downloads, type, fileUrl, onDownload }) {
+    const [downloadCount, setDownloadCount] = useState(downloads || 0);
     
     const handleDownload = async () => {
         // Open file in new tab (triggers download for PDFs)
         window.open(fileUrl, '_blank');
         
+        // Update local state immediately for UI feedback
+        setDownloadCount(prev => prev + 1);
+
         // Update download count in database
         if (id) {
             try {
@@ -15,6 +19,9 @@ export default function NoteCard({ id, title, subject, grade, author, size, down
                     .from('notes')
                     .update({ downloads: (downloads || 0) + 1 })
                     .eq('id', id);
+                
+                // Notify parent to update total counts
+                if (onDownload) onDownload();
             } catch (error) {
                 console.error('Error updating download count:', error);
             }
@@ -56,9 +63,15 @@ export default function NoteCard({ id, title, subject, grade, author, size, down
             </div>
 
             <div className="card-footer">
-                <div className="file-size">
-                    <span className="file-size-label">Size</span>
-                    <span className="file-size-value">{size}</span>
+                <div className="flex gap-4 text-sm text-gray-500">
+                    <div className="file-size">
+                        <span className="file-size-label">Size: </span>
+                        <span className="file-size-value">{size}</span>
+                    </div>
+                    <div className="file-downloads">
+                        <span className="file-size-label">Downloads: </span>
+                        <span className="file-size-value">{downloadCount}</span>
+                    </div>
                 </div>
 
                 <div className="card-actions">

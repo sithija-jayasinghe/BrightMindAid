@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://sithija-jayasinghe.github.io/EduRelief",
+  "homepage": "https://sithija-jayasinghe.github.io/BrightMindAid",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

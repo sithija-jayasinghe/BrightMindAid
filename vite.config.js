@@ -4,15 +4,15 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/EduRelief/',
+  base: '/BrightMindAid/',
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Learn Aid Sri Lanka',
-        short_name: 'Learn Aid',
+        name: 'BrightMindAid',
+        short_name: 'BrightMindAid',
         description: 'Community-driven study aid for flood relief',
         theme_color: '#2E7D32',
         background_color: '#ffffff',

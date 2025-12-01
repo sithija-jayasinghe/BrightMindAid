@@ -19,7 +19,7 @@ export default function Header({ liteMode, toggleLiteMode, onUploadClick }) {
                         <GraduationCap size={24} />
                     </div>
                     <div className="logo-text">
-                        <h1>EduRelief</h1>
+                        <h1>BrightMindAid</h1>
                         <span>Together We Learn & together we Grow</span>
                     </div>
                 </Link>
