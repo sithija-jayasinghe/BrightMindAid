@@ -210,6 +210,7 @@ export default function RequestBoard({ onUploadClick }) {
                                         value={formData.grade}
                                         onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
                                     >
+                                        <option>Grade 1-5</option>
                                         <option>Grade 6-9</option>
                                         <option>Grade 10</option>
                                         <option>Grade 11 (O/L)</option>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, UploadCloud, File, Heart } from 'lucide-react';
+import { X, UploadCloud, File, Heart, Calendar } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 export default function UploadModal({ isOpen, onClose }) {
@@ -8,12 +8,20 @@ export default function UploadModal({ isOpen, onClose }) {
     const [submitted, setSubmitted] = useState(false);
     const [uploading, setUploading] = useState(false);
     const fileInputRef = React.useRef(null);
+    
+    // Generate years from 2015 to current year
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: currentYear - 2014 }, (_, i) => currentYear - i);
+    
     const [formData, setFormData] = useState({
         subject: '',
         grade: 'Grade 6-9',
         title: '',
         type: 'Note',
-        medium: 'Sinhala'
+        medium: 'Sinhala',
+        year: '',
+        chapter: '',
+        tags: ''
     });
 
     if (!isOpen) return null;
@@ -87,7 +95,10 @@ export default function UploadModal({ isOpen, onClose }) {
                 medium: formData.medium,
                 file_url: urlData.publicUrl,
                 file_size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
-                author: 'Community Member'
+                author: 'Community Member',
+                year: formData.year ? parseInt(formData.year) : null,
+                chapter: formData.chapter || null,
+                tags: formData.tags ? formData.tags.split(',').map(t => t.trim()).filter(Boolean) : null
             };
             
             console.log('Inserting note:', noteData);
@@ -110,7 +121,7 @@ export default function UploadModal({ isOpen, onClose }) {
                 onClose();
                 setSubmitted(false);
                 setFile(null);
-                setFormData({ subject: '', grade: 'Grade 6-9', title: '', type: 'Note', medium: 'Sinhala' });
+                setFormData({ subject: '', grade: 'Grade 6-9', title: '', type: 'Note', medium: 'Sinhala', year: '', chapter: '', tags: '' });
             }, 3000);
 
         } catch (error) {
@@ -152,7 +163,7 @@ export default function UploadModal({ isOpen, onClose }) {
 
                         <form onSubmit={handleSubmit} className="modal-body">
                             <div className="form-group">
-                                <label className="form-label">Subject</label>
+                                <label className="form-label">Subject *</label>
                                 <input
                                     type="text"
                                     placeholder="e.g. Combined Maths, ICT, History"
@@ -165,7 +176,7 @@ export default function UploadModal({ isOpen, onClose }) {
 
                             <div className="form-row">
                                 <div className="form-col">
-                                    <label className="form-label">Type</label>
+                                    <label className="form-label">Type *</label>
                                     <select
                                         className="form-select"
                                         value={formData.type}
@@ -175,15 +186,18 @@ export default function UploadModal({ isOpen, onClose }) {
                                         <option>Past Paper</option>
                                         <option>Marking Scheme</option>
                                         <option>Model Paper</option>
+                                        <option>Textbook</option>
+                                        <option>Revision</option>
                                     </select>
                                 </div>
                                 <div className="form-col">
-                                    <label className="form-label">Grade</label>
+                                    <label className="form-label">Grade *</label>
                                     <select
                                         className="form-select"
                                         value={formData.grade}
                                         onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
                                     >
+                                        <option>Grade 1-5</option>
                                         <option>Grade 6-9</option>
                                         <option>Grade 10</option>
                                         <option>Grade 11 (O/L)</option>
@@ -191,7 +205,7 @@ export default function UploadModal({ isOpen, onClose }) {
                                     </select>
                                 </div>
                                 <div className="form-col">
-                                    <label className="form-label">Medium</label>
+                                    <label className="form-label">Medium *</label>
                                     <select
                                         className="form-select"
                                         value={formData.medium}
@@ -204,20 +218,59 @@ export default function UploadModal({ isOpen, onClose }) {
                                 </div>
                             </div>
 
-                            <div className="form-group">
-                                <label className="form-label">Title</label>
-                                <input
-                                    type="text"
-                                    placeholder="e.g. 2023 Revision"
-                                    className="form-input"
-                                    required
-                                    value={formData.title}
-                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                />
+                            <div className="form-row">
+                                <div className="form-col">
+                                    <label className="form-label">Title *</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. 2023 Revision"
+                                        className="form-input"
+                                        required
+                                        value={formData.title}
+                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                    />
+                                </div>
+                                <div className="form-col">
+                                    <label className="form-label">Year (for papers)</label>
+                                    <select
+                                        className="form-select"
+                                        value={formData.year}
+                                        onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                                    >
+                                        <option value="">Select Year</option>
+                                        {years.map(year => (
+                                            <option key={year} value={year}>{year}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-col">
+                                    <label className="form-label">Chapter/Unit (optional)</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. Unit 5, Chapter 3"
+                                        className="form-input"
+                                        value={formData.chapter}
+                                        onChange={(e) => setFormData({ ...formData, chapter: e.target.value })}
+                                    />
+                                </div>
+                                <div className="form-col">
+                                    <label className="form-label">Tags (optional)</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. trigonometry, formulas"
+                                        className="form-input"
+                                        value={formData.tags}
+                                        onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                                    />
+                                    <span className="form-hint">Separate with commas</span>
+                                </div>
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Upload File (PDF, Images)</label>
+                                <label className="form-label">Upload File (PDF, Images) *</label>
                                 <div
                                     className={`upload-area ${dragActive ? 'active' : ''}`}
                                     onDragEnter={handleDrag}
