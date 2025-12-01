@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { FileText, Download, Eye, File, BookOpen } from 'lucide-react';
+import { FileText, Download, Eye, File, BookOpen, Share2, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-export default function NoteCard({ id, title, subject, grade, author, size, downloads, type, fileUrl, onDownload }) {
+export default function NoteCard({ id, title, subject, grade, author, size, downloads, type, medium, fileUrl, onDownload }) {
     const [downloadCount, setDownloadCount] = useState(downloads || 0);
+    const [copied, setCopied] = useState(false);
     
     const handleDownload = async () => {
         // Open file in new tab (triggers download for PDFs)
@@ -28,19 +29,36 @@ export default function NoteCard({ id, title, subject, grade, author, size, down
         }
     };
 
-    const handlePreview = () => {
-        // Open file in new tab for preview
-        window.open(fileUrl, '_blank');
+    const handleShare = async () => {
+        const shareData = {
+            title: title,
+            text: `Check out this ${subject} note on BrightMindAid!`,
+            url: fileUrl
+        };
+
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData);
+            } catch (err) {
+                console.log('Error sharing:', err);
+            }
+        } else {
+            // Fallback to clipboard
+            navigator.clipboard.writeText(fileUrl);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }
     };
 
     // Choose icon based on type
     const getIcon = () => {
         switch(type?.toLowerCase()) {
-            case 'past paper':
-                return <File size={24} strokeWidth={1.5} />;
-            case 'note':
-                return <BookOpen size={24} strokeWidth={1.5} />;
-            default:
+                    <div className="card-tags">
+                        <span className="tag tag-grade">{grade}</span>
+                        <span className="tag tag-subject">{subject}</span>
+                        {type && <span className="tag tag-type">{type}</span>}
+                        {medium && <span className="tag" style={{ backgroundColor: '#e0f2fe', color: '#0284c7' }}>{medium}</span>}
+                    </div>
                 return <FileText size={24} strokeWidth={1.5} />;
         }
     };
@@ -73,10 +91,13 @@ export default function NoteCard({ id, title, subject, grade, author, size, down
                         <span className="file-size-value">{downloadCount}</span>
                     </div>
                 </div>
-
                 <div className="card-actions">
+                    <button className="btn-icon" title={copied ? "Copied!" : "Share"} onClick={handleShare}>
+                        {copied ? <Check size={18} className="text-green-500" /> : <Share2 size={18} />}
+                    </button>
                     <button className="btn-icon" title="Preview" onClick={handlePreview}>
                         <Eye size={18} />
+                    </button>size={18} />
                     </button>
                     <button className="btn-primary btn-sm" title="Download" onClick={handleDownload}>
                         <Download size={16} />

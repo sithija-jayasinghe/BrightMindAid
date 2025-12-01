@@ -11,7 +11,8 @@ export default function UploadModal({ isOpen, onClose }) {
         subject: '',
         grade: 'Grade 6-9',
         title: '',
-        type: 'Note'
+        type: 'Note',
+        medium: 'Sinhala'
     });
 
     if (!isOpen) return null;
@@ -78,6 +79,7 @@ export default function UploadModal({ isOpen, onClose }) {
                 subject: formData.subject,
                 grade: formData.grade,
                 type: formData.type,
+                medium: formData.medium,
                 file_url: urlData.publicUrl,
                 file_size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
                 author: 'Community Member'
@@ -103,7 +105,7 @@ export default function UploadModal({ isOpen, onClose }) {
                 onClose();
                 setSubmitted(false);
                 setFile(null);
-                setFormData({ subject: '', grade: 'Grade 6-9', title: '', type: 'Note' });
+                setFormData({ subject: '', grade: 'Grade 6-9', title: '', type: 'Note', medium: 'Sinhala' });
             }, 3000);
 
         } catch (error) {
@@ -157,7 +159,7 @@ export default function UploadModal({ isOpen, onClose }) {
                             </div>
 
                             <div className="flex" style={{ gap: '1rem', marginBottom: '1rem' }}>
-                                <div style={{ flex: 1 }}>
+                                <div style={{ flex: '1 1 0%', minWidth: 0 }}>
                                     <label className="form-label">Type</label>
                                     <select
                                         className="form-select"
@@ -170,7 +172,7 @@ export default function UploadModal({ isOpen, onClose }) {
                                         <option>Model Paper</option>
                                     </select>
                                 </div>
-                                <div style={{ flex: 1 }}>
+                                <div style={{ flex: '1 1 0%', minWidth: 0 }}>
                                     <label className="form-label">Grade</label>
                                     <select
                                         className="form-select"
@@ -181,6 +183,18 @@ export default function UploadModal({ isOpen, onClose }) {
                                         <option>Grade 10</option>
                                         <option>Grade 11 (O/L)</option>
                                         <option>Grade 12-13 (A/L)</option>
+                                    </select>
+                                </div>
+                                <div style={{ flex: '1 1 0%', minWidth: 0 }}>
+                                    <label className="form-label">Medium</label>
+                                    <select
+                                        className="form-select"
+                                        value={formData.medium}
+                                        onChange={(e) => setFormData({ ...formData, medium: e.target.value })}
+                                    >
+                                        <option>Sinhala</option>
+                                        <option>English</option>
+                                        <option>Tamil</option>
                                     </select>
                                 </div>
                             </div>

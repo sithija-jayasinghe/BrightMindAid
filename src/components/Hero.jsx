@@ -1,7 +1,7 @@
 import React from 'react';
 import { Search, Filter, Sparkles, BookOpen, Users } from 'lucide-react';
 
-export default function Hero({ onSearch, totalDownloads = 0 }) {
+export default function Hero({ onSearch, onFilterMedium, totalDownloads = 0 }) {
     return (
         <section className="hero">
             {/* Background Image */}
@@ -40,13 +40,11 @@ export default function Hero({ onSearch, totalDownloads = 0 }) {
                     <div className="search-divider"></div>
                     <div className="search-select-wrapper">
                         <Filter className="filter-icon" size={16} />
-                        <select>
-                            <option value="">All Subjects</option>
-                            <option value="maths">Combined Maths</option>
-                            <option value="biology">Biology</option>
-                            <option value="physics">Physics</option>
-                            <option value="chemistry">Chemistry</option>
-                            <option value="ict">ICT</option>
+                        <select onChange={(e) => onFilterMedium(e.target.value)}>
+                            <option value="">All Mediums</option>
+                            <option value="Sinhala">Sinhala</option>
+                            <option value="English">English</option>
+                            <option value="Tamil">Tamil</option>
                         </select>
                     </div>
                 </div>

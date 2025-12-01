@@ -11,6 +11,7 @@ function Home() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [mediumFilter, setMediumFilter] = useState('');
   const [totalDownloads, setTotalDownloads] = useState(0);
   const [showAll, setShowAll] = useState(false);
 
@@ -24,7 +25,7 @@ function Home() {
     }, 500); // Debounce search
 
     return () => clearTimeout(timer);
-  }, [searchQuery]);
+  }, [searchQuery, mediumFilter]);
 
   const fetchDownloads = async () => {
     try {
@@ -53,6 +54,10 @@ function Home() {
         query = query.or(`title.ilike.%${searchQuery}%,subject.ilike.%${searchQuery}%,grade.ilike.%${searchQuery}%`);
       }
 
+      if (mediumFilter) {
+        query = query.eq('medium', mediumFilter);
+      }
+
       const { data, error } = await query;
 
       if (error) throw error;
@@ -62,10 +67,10 @@ function Home() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const displayedNotes = showAll || searchQuery ? notes : notes.slice(0, 6);
-
+  return (
+    <main className="min-h-screen">
+      <Hero onSearch={setSearchQuery} onFilterMedium={setMediumFilter} totalDownloads={totalDownloads} />
+      <div className="container py-16">
   return (
     <main className="min-h-screen">
       <Hero onSearch={setSearchQuery} totalDownloads={totalDownloads} />
@@ -111,6 +116,7 @@ function Home() {
                 author={note.author}
                 size={note.file_size}
                 type={note.type}
+                medium={note.medium}
                 downloads={note.downloads}
                 fileUrl={note.file_url}
                 onDownload={fetchDownloads}
