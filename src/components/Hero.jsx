@@ -70,8 +70,12 @@ export default function Hero({
             {/* Background Image */}
             <div className="hero-bg">
                 <img 
-                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80" 
+                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=75" 
                     alt="Students studying together"
+                    fetchPriority="high"
+                    decoding="async"
+                    width="800"
+                    height="533"
                 />
             </div>
             

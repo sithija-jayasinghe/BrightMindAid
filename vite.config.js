@@ -14,7 +14,7 @@ export default defineConfig({
         name: 'BrightMindAid',
         short_name: 'BrightMindAid',
         description: 'Community-driven study aid for flood relief',
-        theme_color: '#2E7D32',
+        theme_color: '#0891b2',
         background_color: '#ffffff',
         display: 'standalone',
         icons: [
@@ -32,4 +32,19 @@ export default defineConfig({
       }
     })
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split vendor chunks for better caching
+          'react-vendor': ['react', 'react-dom'],
+          'router': ['react-router-dom'],
+          'supabase': ['@supabase/supabase-js'],
+          'icons': ['lucide-react']
+        }
+      }
+    },
+    // Improve chunk size warnings
+    chunkSizeWarningLimit: 500
+  }
 })

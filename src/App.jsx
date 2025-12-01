@@ -1,16 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import NoteCard from './components/NoteCard';
-import RequestBoard from './pages/RequestBoard';
-import VideoTutorials from './pages/VideoTutorials';
-import StudyPlanner from './pages/StudyPlanner';
-import RevisionCards from './pages/RevisionCards';
-import ImpactDashboard from './pages/ImpactDashboard';
-import ThankYouNotes from './pages/ThankYouNotes';
 import UploadModal from './components/UploadModal';
 import { supabase } from './lib/supabase';
+
+// Lazy load non-critical pages for better initial load performance
+const RequestBoard = lazy(() => import('./pages/RequestBoard'));
+const VideoTutorials = lazy(() => import('./pages/VideoTutorials'));
+const StudyPlanner = lazy(() => import('./pages/StudyPlanner'));
+const RevisionCards = lazy(() => import('./pages/RevisionCards'));
+const ImpactDashboard = lazy(() => import('./pages/ImpactDashboard'));
+const ThankYouNotes = lazy(() => import('./pages/ThankYouNotes'));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="page-loader">
+    <div className="loader-spinner"></div>
+    <p>Loading...</p>
+  </div>
+);
 
 function Home() {
   const [notes, setNotes] = useState([]);
@@ -330,12 +340,36 @@ export default function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/requests" element={<RequestBoard onUploadClick={() => setUploadModalOpen(true)} />} />
-          <Route path="/videos" element={<VideoTutorials />} />
-          <Route path="/planner" element={<StudyPlanner />} />
-          <Route path="/revision" element={<RevisionCards />} />
-          <Route path="/impact" element={<ImpactDashboard />} />
-          <Route path="/thanks" element={<ThankYouNotes />} />
+          <Route path="/requests" element={
+            <Suspense fallback={<PageLoader />}>
+              <RequestBoard onUploadClick={() => setUploadModalOpen(true)} />
+            </Suspense>
+          } />
+          <Route path="/videos" element={
+            <Suspense fallback={<PageLoader />}>
+              <VideoTutorials />
+            </Suspense>
+          } />
+          <Route path="/planner" element={
+            <Suspense fallback={<PageLoader />}>
+              <StudyPlanner />
+            </Suspense>
+          } />
+          <Route path="/revision" element={
+            <Suspense fallback={<PageLoader />}>
+              <RevisionCards />
+            </Suspense>
+          } />
+          <Route path="/impact" element={
+            <Suspense fallback={<PageLoader />}>
+              <ImpactDashboard />
+            </Suspense>
+          } />
+          <Route path="/thanks" element={
+            <Suspense fallback={<PageLoader />}>
+              <ThankYouNotes />
+            </Suspense>
+          } />
         </Routes>
 
         <UploadModal
