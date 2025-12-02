@@ -1,6 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Hero from './components/Hero';
 import NoteCard from './components/NoteCard';
 import UploadModal from './components/UploadModal';
@@ -437,6 +438,8 @@ export default function App() {
             </Suspense>
           } />
         </Routes>
+
+        <Footer />
 
         <UploadModal
           isOpen={uploadModalOpen}
