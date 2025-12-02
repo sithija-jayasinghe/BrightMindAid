@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, BookOpen, Target, Plus, Trash2, CheckCircle, AlertCircle, Download, Bell, Settings, BarChart3, ListChecks, Lightbulb } from 'lucide-react';
+import { useSEO } from '../lib/useSEO';
 import './StudyPlanner.css';
 
 // Helper to load saved data from localStorage
@@ -16,6 +17,7 @@ const loadSavedData = () => {
 };
 
 export default function StudyPlanner() {
+    useSEO('planner');
     const savedData = loadSavedData();
     const [examDate, setExamDate] = useState(savedData?.examDate || '');
     const [subjects, setSubjects] = useState(savedData?.subjects || []);

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, Upload, ThumbsUp, CheckCircle, Clock, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { useSEO } from '../lib/useSEO';
 
 export default function RequestBoard({ onUploadClick }) {
+    useSEO('requests');
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showRequestModal, setShowRequestModal] = useState(false);

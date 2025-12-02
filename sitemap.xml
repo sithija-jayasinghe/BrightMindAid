@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+<!-- Homepage -->
+<url>
+  <loc>https://brightmindaid.site/</loc>
+  <lastmod>2025-12-02</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<!-- Browse Materials -->
+<url>
+  <loc>https://brightmindaid.site/browse</loc>
+  <lastmod>2025-12-02</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.9</priority>
+</url>
+
+<!-- Request Board -->
+<url>
+  <loc>https://brightmindaid.site/requests</loc>
+  <lastmod>2025-12-02</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- Video Tutorials -->
+<url>
+  <loc>https://brightmindaid.site/videos</loc>
+  <lastmod>2025-12-02</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- Study Planner -->
+<url>
+  <loc>https://brightmindaid.site/planner</loc>
+  <lastmod>2025-12-02</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<!-- Revision Cards -->
+<url>
+  <loc>https://brightmindaid.site/revision</loc>
+  <lastmod>2025-12-02</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<!-- Impact Dashboard -->
+<url>
+  <loc>https://brightmindaid.site/impact</loc>
+  <lastmod>2025-12-02</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.6</priority>
+</url>
+
+<!-- Thank You Notes -->
+<url>
+  <loc>https://brightmindaid.site/thanks</loc>
+  <lastmod>2025-12-02</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.6</priority>
+</url>
+
+</urlset>

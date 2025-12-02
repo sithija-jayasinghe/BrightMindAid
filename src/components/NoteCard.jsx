@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import { FileText, Download, Eye, File, BookOpen, Share2, Check, Calendar, Clock } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
+// Helper to format author display name
+const formatAuthorDisplay = (author) => {
+    if (!author) return 'Anonymous';
+    if (author.startsWith('Anon#')) {
+        return 'Anonymous';
+    }
+    return author;
+};
+
 export default function NoteCard({ 
     id, 
     title, 
@@ -115,7 +124,7 @@ export default function NoteCard({
                         </div>
                         <h3 className="card-title">{title}</h3>
                         <div className="card-meta">
-                            <span className="card-author">By {author}</span>
+                            <span className="card-author" title={author?.startsWith('Anon#') ? `ID: ${author}` : ''}>By {formatAuthorDisplay(author)}</span>
                             {createdAt && (
                                 <span className="card-date">
                                     <Clock size={12} />
@@ -168,7 +177,7 @@ export default function NoteCard({
                         {year && <span className="tag tag-year">{year}</span>}
                     </div>
                     <h3 className="card-title">{title}</h3>
-                    <p className="card-author">By {author}</p>
+                    <p className="card-author" title={author?.startsWith('Anon#') ? `ID: ${author}` : ''}>By {formatAuthorDisplay(author)}</p>
                 </div>
             </div>
 

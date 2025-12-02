@@ -1,13 +1,15 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import NoteCard from './components/NoteCard';
 import UploadModal from './components/UploadModal';
 import { supabase } from './lib/supabase';
+import { useSEO } from './lib/useSEO';
 
 // Lazy load non-critical pages for better initial load performance
 const RequestBoard = lazy(() => import('./pages/RequestBoard'));
+const Browse = lazy(() => import('./pages/Browse'));
 const VideoTutorials = lazy(() => import('./pages/VideoTutorials'));
 const StudyPlanner = lazy(() => import('./pages/StudyPlanner'));
 const RevisionCards = lazy(() => import('./pages/RevisionCards'));
@@ -23,6 +25,7 @@ const PageLoader = () => (
 );
 
 function Home() {
+  useSEO('home');
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,10 +40,12 @@ function Home() {
   const [showAll, setShowAll] = useState(false);
   const [subjects, setSubjects] = useState([]);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [gradeCounts, setGradeCounts] = useState({}); // For browse cards
 
   useEffect(() => {
     fetchDownloads();
     fetchSubjects();
+    fetchGradeCounts();
 
     // Subscribe to realtime changes on the notes table
     const channel = supabase
@@ -69,6 +74,7 @@ function Home() {
           fetchDownloads();
           fetchNotes();
           fetchSubjects();
+          fetchGradeCounts();
         }
       )
       .subscribe();
@@ -100,6 +106,27 @@ function Home() {
       setSubjects(uniqueSubjects.sort());
     } catch (error) {
       console.error('Error fetching subjects:', error);
+    }
+  };
+
+  const fetchGradeCounts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('notes')
+        .select('grade');
+      
+      if (error) throw error;
+      
+      // Count materials per grade
+      const counts = {};
+      data.forEach(note => {
+        if (note.grade) {
+          counts[note.grade] = (counts[note.grade] || 0) + 1;
+        }
+      });
+      setGradeCounts(counts);
+    } catch (error) {
+      console.error('Error fetching grade counts:', error);
     }
   };
 
@@ -209,6 +236,40 @@ function Home() {
         totalNotes={totalNotes}
         subjects={subjects}
       />
+
+      {/* Browse by Grade Section */}
+      <div className="container py-16">
+        <div className="browse-section-header">
+          <h2 className="text-3xl mb-2">Browse by Grade</h2>
+          <p className="text-gray-500">Find study materials organized by grade level</p>
+        </div>
+        <div className="browse-grade-cards">
+          {[
+            { grade: 'Grade 1-5', label: 'Primary', color: '#10b981' },
+            { grade: 'Grade 6-9', label: 'Junior Secondary', color: '#06b6d4' },
+            { grade: 'Grade 10', label: 'Senior Secondary', color: '#3b82f6' },
+            { grade: 'Grade 11 (O/L)', label: 'O/L Exam', color: '#8b5cf6' },
+            { grade: 'Grade 12-13 (A/L)', label: 'A/L Exam', color: '#f59e0b' },
+          ].map((item) => (
+            <Link 
+              key={item.grade}
+              to={`/browse?grade=${encodeURIComponent(item.grade)}`}
+              className="browse-grade-card"
+              style={{ '--card-accent': item.color }}
+            >
+              <div className="grade-card-info">
+                <h3>{item.grade}</h3>
+                <span className="grade-card-label">{item.label}</span>
+                <span className="grade-card-count">
+                  {gradeCounts[item.grade] || 0} materials
+                </span>
+              </div>
+              <div className="grade-card-arrow">→</div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       <div className="container py-16">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 gap-4">
           <div>
@@ -343,6 +404,11 @@ export default function App() {
           <Route path="/requests" element={
             <Suspense fallback={<PageLoader />}>
               <RequestBoard onUploadClick={() => setUploadModalOpen(true)} />
+            </Suspense>
+          } />
+          <Route path="/browse" element={
+            <Suspense fallback={<PageLoader />}>
+              <Browse />
             </Suspense>
           } />
           <Route path="/videos" element={

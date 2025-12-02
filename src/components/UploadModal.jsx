@@ -1,6 +1,42 @@
-import React, { useState } from 'react';
-import { X, UploadCloud, File, Heart, Calendar } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, UploadCloud, File, Heart, Calendar, User } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+
+// Storage key for persistent user identity
+const USER_IDENTITY_KEY = 'brightmindaid_user_identity';
+
+// Generate a unique anonymous ID
+const generateAnonId = () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let id = '';
+    for (let i = 0; i < 6; i++) {
+        id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return `Anon#${id}`;
+};
+
+// Get or create persistent user identity
+const getUserIdentity = () => {
+    try {
+        const stored = localStorage.getItem(USER_IDENTITY_KEY);
+        if (stored) {
+            return JSON.parse(stored);
+        }
+    } catch (e) {
+        console.error('Error reading user identity:', e);
+    }
+    // Return default - will be set on first upload
+    return { name: '', anonId: null, preferAnonymous: false };
+};
+
+// Save user identity to localStorage
+const saveUserIdentity = (identity) => {
+    try {
+        localStorage.setItem(USER_IDENTITY_KEY, JSON.stringify(identity));
+    } catch (e) {
+        console.error('Error saving user identity:', e);
+    }
+};
 
 export default function UploadModal({ isOpen, onClose }) {
     const [dragActive, setDragActive] = useState(false);
@@ -13,6 +49,9 @@ export default function UploadModal({ isOpen, onClose }) {
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: currentYear - 2014 }, (_, i) => currentYear - i);
     
+    // Load saved user identity on mount
+    const [userIdentity, setUserIdentity] = useState(getUserIdentity);
+    
     const [formData, setFormData] = useState({
         subject: '',
         grade: 'Grade 6-9',
@@ -21,8 +60,23 @@ export default function UploadModal({ isOpen, onClose }) {
         medium: 'Sinhala',
         year: '',
         chapter: '',
-        tags: ''
+        tags: '',
+        uploaderName: '',
+        isAnonymous: false
     });
+    
+    // Initialize form with saved identity when modal opens
+    useEffect(() => {
+        if (isOpen) {
+            const identity = getUserIdentity();
+            setUserIdentity(identity);
+            setFormData(prev => ({
+                ...prev,
+                uploaderName: identity.name || '',
+                isAnonymous: identity.preferAnonymous || false
+            }));
+        }
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
@@ -87,6 +141,35 @@ export default function UploadModal({ isOpen, onClose }) {
             console.log('Public URL:', urlData.publicUrl);
 
             // 3. Insert into Database
+            // Determine author name - use provided name, or reuse/generate anonymous ID
+            let authorName;
+            if (formData.isAnonymous || !formData.uploaderName.trim()) {
+                // Anonymous upload - reuse existing anon ID or generate new one
+                if (userIdentity.anonId) {
+                    authorName = userIdentity.anonId;
+                } else {
+                    authorName = generateAnonId();
+                }
+                // Save the anonymous ID and preference for future uploads
+                const newIdentity = { 
+                    name: '', 
+                    anonId: authorName, 
+                    preferAnonymous: true 
+                };
+                saveUserIdentity(newIdentity);
+                setUserIdentity(newIdentity);
+            } else {
+                // Named upload - save their name for future uploads
+                authorName = formData.uploaderName.trim();
+                const newIdentity = { 
+                    name: authorName, 
+                    anonId: userIdentity.anonId, // Keep anon ID in case they switch later
+                    preferAnonymous: false 
+                };
+                saveUserIdentity(newIdentity);
+                setUserIdentity(newIdentity);
+            }
+            
             const noteData = {
                 title: formData.title,
                 subject: formData.subject,
@@ -95,7 +178,7 @@ export default function UploadModal({ isOpen, onClose }) {
                 medium: formData.medium,
                 file_url: urlData.publicUrl,
                 file_size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
-                author: 'Community Member',
+                author: authorName,
                 year: formData.year ? parseInt(formData.year) : null,
                 chapter: formData.chapter || null,
                 tags: formData.tags ? formData.tags.split(',').map(t => t.trim()).filter(Boolean) : null
@@ -121,7 +204,7 @@ export default function UploadModal({ isOpen, onClose }) {
                 onClose();
                 setSubmitted(false);
                 setFile(null);
-                setFormData({ subject: '', grade: 'Grade 6-9', title: '', type: 'Note', medium: 'Sinhala', year: '', chapter: '', tags: '' });
+                setFormData({ subject: '', grade: 'Grade 6-9', title: '', type: 'Note', medium: 'Sinhala', year: '', chapter: '', tags: '', uploaderName: '', isAnonymous: false });
             }, 3000);
 
         } catch (error) {
@@ -183,6 +266,7 @@ export default function UploadModal({ isOpen, onClose }) {
                                         onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                                     >
                                         <option>Note</option>
+                                        <option>Short Notes</option>
                                         <option>Past Paper</option>
                                         <option>Marking Scheme</option>
                                         <option>Model Paper</option>
@@ -267,6 +351,34 @@ export default function UploadModal({ isOpen, onClose }) {
                                     />
                                     <span className="form-hint">Separate with commas</span>
                                 </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Your Name</label>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <div style={{ flex: 1, position: 'relative' }}>
+                                        <User size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
+                                        <input
+                                            type="text"
+                                            placeholder={formData.isAnonymous ? "Uploading anonymously..." : "Enter your name"}
+                                            className="form-input"
+                                            style={{ paddingLeft: '36px' }}
+                                            value={formData.uploaderName}
+                                            onChange={(e) => setFormData({ ...formData, uploaderName: e.target.value })}
+                                            disabled={formData.isAnonymous}
+                                        />
+                                    </div>
+                                </div>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem', cursor: 'pointer', fontSize: '0.875rem', color: '#6b7280' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.isAnonymous}
+                                        onChange={(e) => setFormData({ ...formData, isAnonymous: e.target.checked, uploaderName: e.target.checked ? '' : formData.uploaderName })}
+                                        style={{ width: '16px', height: '16px', accentColor: 'var(--color-primary)' }}
+                                    />
+                                    Upload anonymously
+                                </label>
+                                <span className="form-hint">Anonymous uploads get a unique ID for tracking (e.g., Anon#A7X3)</span>
                             </div>
 
                             <div className="form-group">

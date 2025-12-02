@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Play, ExternalLink, Search, Filter, BookOpen, Youtube, Clock, ThumbsUp, Video } from 'lucide-react';
+import { useSEO } from '../lib/useSEO';
 import './VideoTutorials.css';
 
 // Curated educational video resources for Sri Lankan students
@@ -75,6 +76,7 @@ const officialChannels = [
 ];
 
 export default function VideoTutorials() {
+    useSEO('videos');
     const [selectedGrade, setSelectedGrade] = useState('Grade 11 (O/L)');
     const [selectedSubject, setSelectedSubject] = useState('');
     const [searchQuery, setSearchQuery] = useState('');

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Copy, Share2, BookOpen, Bookmark, ChevronLeft, ChevronRight, Lightbulb, Download, Layers, Grid } from 'lucide-react';
+import { useSEO } from '../lib/useSEO';
 
 // Quick revision cards data
 const revisionCards = {
@@ -64,6 +65,7 @@ const revisionCards = {
 };
 
 export default function RevisionCards() {
+    useSEO('revision');
     const [selectedSubject, setSelectedSubject] = useState('Mathematics');
     const [selectedLevel, setSelectedLevel] = useState('O/L');
     const [currentCardIndex, setCurrentCardIndex] = useState(0);

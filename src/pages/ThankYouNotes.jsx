@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Send, MessageCircle, User, Calendar, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { useSEO } from '../lib/useSEO';
 
 export default function ThankYouNotes() {
+    useSEO('thanks');
     const [notes, setNotes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { GraduationCap, Zap, ZapOff, Upload, Menu, X, ChevronDown, BookOpen, Video, Calendar, Layers, BarChart3, Heart } from 'lucide-react';
+import { GraduationCap, Zap, ZapOff, Upload, Menu, X, ChevronDown, BookOpen, Video, Calendar, Layers, BarChart3, Heart, FolderOpen } from 'lucide-react';
 
 export default function Header({ liteMode, toggleLiteMode, onUploadClick }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,10 +46,16 @@ export default function Header({ liteMode, toggleLiteMode, onUploadClick }) {
                             Home
                         </Link>
                         <Link
+                            to="/browse"
+                            className={`nav-link ${isActive('/browse') ? 'active' : ''}`}
+                        >
+                            Browse
+                        </Link>
+                        <Link
                             to="/requests"
                             className={`nav-link ${isActive('/requests') ? 'active' : ''}`}
                         >
-                            Request Notes
+                            Requests
                         </Link>
 
                         {/* Tools Dropdown */}
@@ -114,6 +120,14 @@ export default function Header({ liteMode, toggleLiteMode, onUploadClick }) {
                             onClick={closeMenu}
                         >
                             Home
+                        </Link>
+                        <Link
+                            to="/browse"
+                            className={`mobile-nav-link ${isActive('/browse') ? 'active' : ''}`}
+                            onClick={closeMenu}
+                        >
+                            <FolderOpen size={16} />
+                            Browse Materials
                         </Link>
                         <Link
                             to="/requests"
