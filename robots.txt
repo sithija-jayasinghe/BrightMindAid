@@ -1,0 +1,11 @@
+# robots.txt for BrightMindAid
+# https://brightmindaid.site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://brightmindaid.site/sitemap.xml
+
+# Crawl-delay (optional, be polite to crawlers)
+Crawl-delay: 1
