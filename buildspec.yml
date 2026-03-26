@@ -1,25 +1,20 @@
 version: 0.2
 
-env:
-  variables:
-    S3_BUCKET_NAME: aws-cms-erp-frontend-app
-
 phases:
   install:
     runtime-versions:
-      nodejs: 18
+      nodejs: 20
     commands:
-      - npm install
+      - echo Installing dependencies...
+      - npm ci --legacy-peer-deps
 
   build:
     commands:
+      - echo Building the React app...
       - npm run build
 
-  post_build:
-    commands:
-      - echo "Checking files..."
-      - ls -la
-      - ls -la dist
-
-      - echo "Deploying to S3..."
-      - aws s3 sync dist/ s3://aws-cms-erp-frontend-app --delete --debug
+artifacts:
+  files:
+    - '**/*'
+  base-directory: ./dist
+  discard-paths: no
