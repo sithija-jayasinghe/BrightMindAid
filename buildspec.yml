@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    S3_BUCKET_NAME: your-bucket-name
+    S3_BUCKET_NAME: aws-cms-erp-frontend-app
 
 phases:
   install:
@@ -18,7 +18,7 @@ phases:
   post_build:
     commands:
       - echo Deploying to S3...
-      - aws s3 sync dist/ s3://$S3_BUCKET_NAME --delete
+      - aws s3 sync dist/ s3://$aws-cms-erp-frontend-app --delete
       - echo Deployment completed!
 
 artifacts:
