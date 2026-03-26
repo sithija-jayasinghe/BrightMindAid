@@ -17,11 +17,9 @@ phases:
 
   post_build:
     commands:
-      - echo Deploying to S3...
-      - aws s3 sync dist/ s3://aws-cms-erp-frontend-app --delete
-      - echo Deployment completed!
+      - echo "Checking files..."
+      - ls -la
+      - ls -la dist
 
-artifacts:
-  files:
-    - '**/*'
-  base-directory: dist
+      - echo "Deploying to S3..."
+      - aws s3 sync dist/ s3://aws-cms-erp-frontend-app --delete --debug
